@@ -14,6 +14,5 @@ struct GradientColorView: View {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
-            .ignoresSafeArea()
     }
 }

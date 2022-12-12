@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct ColorCircleView: View {
-    var color: Color
-    var isOn: Bool
+    let color: Color
+    var opacity: Double = 0.3
     
     var body: some View {
         Circle()
             .foregroundColor(color)
-            .opacity(isOn ? 1 : 0.3)
+            .opacity(opacity)
             .overlay(Circle().stroke(.black, lineWidth: 3))
-            .shadow(color: color, radius: isOn ? 15 : 0)
+            .shadow(color: color, radius: opacity < 1 ? 0 : 15)
             .padding()
     }
 }

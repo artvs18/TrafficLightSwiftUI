@@ -7,60 +7,66 @@
 
 import SwiftUI
 
+enum CurrentLight {
+    case off, red, yellow, green
+}
+
 struct ContentView: View {
-    @State private var tapCounter = 0
+    @State private var currentLight: CurrentLight = .off
+    @State private var buttonTitle = "START"
     
     var body: some View {
         ZStack {
             GradientColorView()
+                .ignoresSafeArea()
             
             VStack {
-                VStack {
-                    switch tapCounter {
-                    case 1:
-                        ColorCircleView(color: .red, isOn: true)
-                        ColorCircleView(color: .yellow, isOn: false)
-                        ColorCircleView(color: .green, isOn: false)
-                    case 2:
-                        ColorCircleView(color: .red, isOn: false)
-                        ColorCircleView(color: .yellow, isOn: true)
-                        ColorCircleView(color: .green, isOn: false)
-                    case 3:
-                        ColorCircleView(color: .red, isOn: false)
-                        ColorCircleView(color: .yellow, isOn: false)
-                        ColorCircleView(color: .green, isOn: true)
-                    default:
-                        ColorCircleView(color: .red, isOn: false)
-                        ColorCircleView(color: .yellow, isOn: false)
-                        ColorCircleView(color: .green, isOn: false)
-                    }
-                }
-                .aspectRatio(3, contentMode: .fill)
-                .background(Gradient(colors: [.black, .black.opacity(0.5)]))
-                .cornerRadius(10)
-                .padding()
+                ColorCircleView(
+                    color: .red,
+                    opacity: currentLight == .red ? 1 : 0.3
+                )
+                ColorCircleView(
+                    color: .yellow,
+                    opacity: currentLight == .yellow ? 1 : 0.3
+                )
+                ColorCircleView(
+                    color: .green,
+                    opacity: currentLight == .green ? 1 : 0.3
+                )
                 
-                Button {
-                    if tapCounter == 3 {
-                        tapCounter = 0
-                    }
-                    tapCounter += 1
-                } label: {
-                    Text(tapCounter == 0 ? "START" : "NEXT")
+                Button(action: action) {
+                    Text(buttonTitle)
                         .frame(width: 150)
                         .font(.largeTitle)
                         .foregroundColor(.black)
                 }
                 .background(.white.opacity(0.7))
                 .clipShape(Capsule(style: .continuous))
+                .padding()
                 
             }
+            .aspectRatio(3, contentMode: .fill)
+            .background(Gradient(colors: [.black, .black.opacity(0.5)]))
+            .cornerRadius(10)
             .shadow(radius: 10, x: 20, y: 10)
             .padding()
         }
     }
+    
+    private func action() {
+        if buttonTitle == "START" {
+            buttonTitle = "NEXT"
+        }
+        
+        switch currentLight {
+        case .off: currentLight = .red
+        case .red: currentLight = .yellow
+        case .yellow: currentLight = .green
+        case .green: currentLight = .red
+        }
+    }
+    
 }
-
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
